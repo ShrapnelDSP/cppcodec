@@ -90,7 +90,7 @@ public:
             Result& decoded, ResultState&, const alphabet_index_t* idx);
 
     template <typename Result, typename ResultState>
-    static CPPCODEC_ALWAYS_INLINE void decode_tail(
+    static CPPCODEC_ALWAYS_INLINE [[nodiscard]] error decode_tail(
             Result& decoded, ResultState&, const alphabet_index_t* idx, size_t idx_len);
 };
 
@@ -108,22 +108,26 @@ CPPCODEC_ALWAYS_INLINE void base64<CodecVariant>::decode_block(
 
 template <typename CodecVariant>
 template <typename Result, typename ResultState>
-CPPCODEC_ALWAYS_INLINE void base64<CodecVariant>::decode_tail(
+CPPCODEC_ALWAYS_INLINE [[nodiscard]] error base64<CodecVariant>::decode_tail(
         Result& decoded, ResultState& state, const alphabet_index_t* idx, size_t idx_len)
 {
     if (idx_len == 1) {
+        return invalid_input_length_error_value();
+#if 0
         throw invalid_input_length(
                 "invalid number of symbols in last base64 block: found 1, expected 2 or 3");
+#endif
     }
 
     // idx_len == 2: decoded size 1
     data::put(decoded, state, static_cast<uint8_t>((idx[0] << 2) + ((idx[1] & 0x30) >> 4)));
     if (idx_len == 2) {
-        return;
+        return {};
     }
 
     // idx_len == 3: decoded size 2
     data::put(decoded, state, static_cast<uint8_t>(((idx[1] & 0xF) << 4) + ((idx[2] & 0x3C) >> 2)));
+    return {};
 }
 
 } // namespace detail

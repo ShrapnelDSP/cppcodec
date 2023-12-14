@@ -85,7 +85,7 @@ public:
             Result& decoded, ResultState&, const alphabet_index_t* idx);
 
     template <typename Result, typename ResultState>
-    static CPPCODEC_ALWAYS_INLINE void decode_tail(
+    static CPPCODEC_ALWAYS_INLINE [[nodiscard]] error decode_tail(
             Result& decoded, ResultState&, const alphabet_index_t* idx, size_t idx_len);
 };
 
@@ -100,12 +100,15 @@ CPPCODEC_ALWAYS_INLINE void hex<CodecVariant>::decode_block(
 
 template <typename CodecVariant>
 template <typename Result, typename ResultState>
-CPPCODEC_ALWAYS_INLINE void hex<CodecVariant>::decode_tail(
+CPPCODEC_ALWAYS_INLINE [[nodiscard]] error hex<CodecVariant>::decode_tail(
         Result&, ResultState&, const alphabet_index_t*, size_t)
 {
+    return invalid_input_length_error_value();
+#if 0
     throw invalid_input_length(
             "odd-length hex input is not supported by the streaming octet decoder, "
             "use a place-based number decoder instead");
+#endif
 }
 
 } // namespace detail

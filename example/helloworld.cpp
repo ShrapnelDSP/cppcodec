@@ -34,6 +34,8 @@ int main() {
 
     std::vector<uint8_t> decoded = base64::decode("YW55IGNhcm5hbCBwbGVhc3VyZQ==");
     std::cout << "decoded size (\"any carnal pleasure\"): " << decoded.size() << '\n';
-    std::cout << base32::encode(decoded) << std::endl; // "C5Q7J833C5S6WRBC41R6RSB1EDTQ4S8"
+    std::string encoded;
+    cppcodec::error error = base32::encode(encoded, decoded);
+    std::cout << encoded << std::endl; // "C5Q7J833C5S6WRBC41R6RSB1EDTQ4S8"
     return 0;
 }

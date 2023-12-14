@@ -102,7 +102,7 @@ public:
             Result& decoded, ResultState&, const alphabet_index_t* idx);
 
     template <typename Result, typename ResultState>
-    static CPPCODEC_ALWAYS_INLINE void decode_tail(
+    static CPPCODEC_ALWAYS_INLINE [[nodiscard]] error decode_tail(
             Result& decoded, ResultState&, const alphabet_index_t* idx, size_t idx_len);
 };
 
@@ -125,39 +125,49 @@ CPPCODEC_ALWAYS_INLINE void base32<CodecVariant>::decode_block(
 
 template <typename CodecVariant>
 template <typename Result, typename ResultState>
-CPPCODEC_ALWAYS_INLINE void base32<CodecVariant>::decode_tail(
+CPPCODEC_ALWAYS_INLINE [[nodiscard]] error base32<CodecVariant>::decode_tail(
         Result& decoded, ResultState& state, const alphabet_index_t* idx, size_t idx_len)
 {
     if (idx_len == 1) {
+        return invalid_input_length_error_value();
+#if 0
         throw invalid_input_length(
                 "invalid number of symbols in last base32 block: found 1, expected 2, 4, 5 or 7");
+#endif
     }
     if (idx_len == 3) {
+        return invalid_input_length_error_value();
+#if 0
         throw invalid_input_length(
                 "invalid number of symbols in last base32 block: found 3, expected 2, 4, 5 or 7");
+#endif
     }
     if (idx_len == 6) {
+        return invalid_input_length_error_value();
+#if 0
         throw invalid_input_length(
                 "invalid number of symbols in last base32 block: found 6, expected 2, 4, 5 or 7");
+#endif
     }
 
     // idx_len == 2: decoded size 1
     put(decoded, state, static_cast<uint8_t>(((idx[0] << 3) & 0xF8) | ((idx[1] >> 2) & 0x7)));
     if (idx_len == 2) {
-        return;
+        return {};
     }
     // idx_len == 4: decoded size 2
     put(decoded, state, static_cast<uint8_t>(((idx[1] << 6) & 0xC0) | ((idx[2] << 1) & 0x3E) | ((idx[3] >> 4) & 0x1)));
     if (idx_len == 4) {
-        return;
+        return {};
     }
     // idx_len == 5: decoded size 3
     put(decoded, state, static_cast<uint8_t>(((idx[3] << 4) & 0xF0) | ((idx[4] >> 1) & 0xF)));
     if (idx_len == 5) {
-        return;
+        return {};
     }
     // idx_len == 7: decoded size 4
     put(decoded, state, static_cast<uint8_t>(((idx[4] << 7) & 0x80) | ((idx[5] << 2) & 0x7C) | ((idx[6] >> 3) & 0x3)));
+    return {};
 }
 
 } // namespace detail

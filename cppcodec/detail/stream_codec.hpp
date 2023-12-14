@@ -44,7 +44,7 @@ public:
     template <typename Result, typename ResultState> static void encode(
             Result& encoded_result, ResultState&, const uint8_t* binary, size_t binary_size);
 
-    template <typename Result, typename ResultState> static void decode(
+    template <typename Result, typename ResultState> [[nodiscard]] static error decode(
             Result& binary_result, ResultState&, const char* encoded, size_t encoded_size);
 
     static constexpr size_t encoded_size(size_t binary_size) noexcept;
@@ -319,7 +319,7 @@ public:
 
 template <typename Codec, typename CodecVariant>
 template <typename Result, typename ResultState>
-inline void stream_codec<Codec, CodecVariant>::decode(
+inline error stream_codec<Codec, CodecVariant>::decode(
         Result& binary_result, ResultState& state,
         const char* src_encoded, size_t src_size)
 {
@@ -353,7 +353,7 @@ inline void stream_codec<Codec, CodecVariant>::decode(
     }
 
     if (alphabet_index_info<CodecVariant>::is_invalid(*alphabet_index_ptr)) {
-        throw symbol_error(*src);
+        return symbol_error_value();
     }
     ++src;
 
@@ -362,7 +362,7 @@ inline void stream_codec<Codec, CodecVariant>::decode(
         if (last_index_ptr == alphabet_index_start) {
             // Don't accept padding at the start of a block.
             // The encoder should have omitted that padding altogether.
-            throw padding_error();
+            return padding_error_value();
         }
         // We're in here because we just read a (first) padding character. Try to read more.
         // Count with last_index_ptr, but store in alphabet_index_ptr so we don't
@@ -392,15 +392,17 @@ inline void stream_codec<Codec, CodecVariant>::decode(
                     ) && last_index_ptr != alphabet_index_end)
         {
             // If the input is not a multiple of the block size then the input is incorrect.
-            throw padding_error();
+            return padding_error_value();
         }
         if (alphabet_index_ptr >= alphabet_index_end) {
             abort();
-            return;
+            return {};
         }
-        Codec::decode_tail(binary_result, state, alphabet_indexes,
+        return Codec::decode_tail(binary_result, state, alphabet_indexes,
                 static_cast<size_t>(alphabet_index_ptr - alphabet_index_start));
     }
+    
+    return {};
 }
 
 template <typename Codec, typename CodecVariant>

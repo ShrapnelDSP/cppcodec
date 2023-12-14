@@ -33,8 +33,9 @@ int main(int argc, char *argv[])
     for (int i = 1; i < argc; ++i) {
         size_t arglen = strlen(argv[i]);
 
-        std::cout << cppcodec::hex_lower::encode(argv[i], arglen) << std::endl;
-        std::cout << cppcodec::hex_upper::encode(argv[i], arglen) << std::endl;
+        cppcodec::error error;
+        std::cout << cppcodec::hex_lower::encode(argv[i], arglen, error) << std::endl;
+        std::cout << cppcodec::hex_upper::encode(argv[i], arglen, error) << std::endl;
     }
     return 0;
 }

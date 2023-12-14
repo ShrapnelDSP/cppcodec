@@ -26,6 +26,7 @@
 
 #include <stdexcept>
 #include <string>
+#include <variant>
 
 namespace cppcodec {
 
@@ -54,12 +55,23 @@ static void uctoa(unsigned char n, char (&s)[N])
 }
 } // end namespace detail
 
+// TODO: after all the tests pass, turn off this class, and there should be no
+// compile errors. If there are any, then they were not covered with tests. Add
+// new tests, then try again until these can be removed.
+// Also manually remove and other throws that are not based on these types. 
+#if 1
 
 class parse_error : public std::domain_error
 {
 public:
     using std::domain_error::domain_error;
 };
+
+class symbol_error_value {};
+class invalid_input_length_error_value {};
+class padding_error_value {};
+
+using error = std::variant<std::monostate, symbol_error_value, invalid_input_length_error_value, padding_error_value>;
 
 // Avoids memory allocation, so it can be used in constexpr functions.
 class symbol_error : public parse_error
@@ -103,6 +115,7 @@ public:
 
     padding_error(const padding_error&) = default;
 };
+#endif
 
 } // namespace cppcodec
 

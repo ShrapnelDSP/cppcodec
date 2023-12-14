@@ -25,9 +25,9 @@ option(
 option(CPPCODEC_BUILD_TESTING "Build cppcodec tests" ${BUILD_TESTING_DEFAULT})
 option(CPPCODEC_BUILD_TOOLS "Build cppcodec tools" ${BUILD_TOOLS_DEFAULT})
 
-# Request C++11, or let the user specify the standard on via -D command line option.
+# Request C++20, or let the user specify the standard on via -D command line option.
 if(NOT CMAKE_CXX_STANDARD)
-    set(CMAKE_CXX_STANDARD 11)
+    set(CMAKE_CXX_STANDARD 20)
 endif()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
