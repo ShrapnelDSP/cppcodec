@@ -90,7 +90,7 @@ public:
             Result& decoded, ResultState&, const alphabet_index_t* idx);
 
     template <typename Result, typename ResultState>
-    static CPPCODEC_ALWAYS_INLINE [[nodiscard]] error decode_tail(
+    [[nodiscard]] static CPPCODEC_ALWAYS_INLINE error decode_tail(
             Result& decoded, ResultState&, const alphabet_index_t* idx, size_t idx_len);
 };
 
@@ -108,7 +108,7 @@ CPPCODEC_ALWAYS_INLINE void base64<CodecVariant>::decode_block(
 
 template <typename CodecVariant>
 template <typename Result, typename ResultState>
-CPPCODEC_ALWAYS_INLINE [[nodiscard]] error base64<CodecVariant>::decode_tail(
+[[nodiscard]] CPPCODEC_ALWAYS_INLINE error base64<CodecVariant>::decode_tail(
         Result& decoded, ResultState& state, const alphabet_index_t* idx, size_t idx_len)
 {
     if (idx_len == 1) {
