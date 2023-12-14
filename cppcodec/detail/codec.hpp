@@ -62,11 +62,7 @@ public:
     template <typename Result> static Result encode(const uint8_t* binary, size_t binary_size, error &error) noexcept;
     template <typename Result> static Result encode(const char* binary, size_t binary_size, error &error) noexcept;
     template <typename Result = std::string, typename T = std::vector<uint8_t>>
-    // TODO: this is creating ambigous overloads with the error type, update
-    // SFINAE above, or remove the API that does not return the error. Just
-    // making it fail when the type is the error type should be enough?
-    // For now, a dummy int argument is used to clarify this
-    static Result encode(const T& binary, error &error, int dummy) noexcept; 
+    static Result encode(const T& binary, error &error) noexcept; 
 
     // Reused result container version. Resizes encoded_result before writing to it.
     template <typename Result>
@@ -169,7 +165,7 @@ inline Result codec<CodecImpl>::encode(const char* binary, size_t binary_size, e
 
 template <typename CodecImpl>
 template <typename Result, typename T>
-inline Result codec<CodecImpl>::encode(const T& binary, error &error, int) noexcept
+inline Result codec<CodecImpl>::encode(const T& binary, error &error) noexcept
 {
     return encode<Result>(data::uchar_data(binary), data::size(binary), error);
 }

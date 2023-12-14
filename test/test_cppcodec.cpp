@@ -80,24 +80,24 @@ TEST_CASE("Douglas Crockford's base32", "[base32][crockford]") {
 
     SECTION("encoding data") {
         cppcodec::error error;
-        REQUIRE(base32::encode(std::vector<uint8_t>(), error, 0) == "");
-        REQUIRE(base32::encode(std::vector<uint8_t>({0}), error, 0) == "00");
-        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0}), error, 0) == "0000");
-        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0}), error, 0) == "00000");
-        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0, 0}), error, 0) == "0000000");
-        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0, 0, 0}), error, 0) == "00000000");
-        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0, 0, 0, 0}), error, 0) == "0000000000");
+        REQUIRE(base32::encode(std::vector<uint8_t>(), error) == "");
+        REQUIRE(base32::encode(std::vector<uint8_t>({0}), error) == "00");
+        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0}), error) == "0000");
+        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0}), error) == "00000");
+        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0, 0}), error) == "0000000");
+        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0, 0, 0}), error) == "00000000");
+        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0, 0, 0, 0}), error) == "0000000000");
 
         // Constructing an std::string reduces the size of the char array by one (null terminator).
         // Therefore, the result for passing the string literal directly ends up encoding
         // one more character, which produces two more symbols in this particular case.
-        REQUIRE(base32::encode(std::string("Hello World"), error, 0) == hello_encoded);
-        REQUIRE(base32::encode("Hello World", error, 0) == hello_encoded_null);
+        REQUIRE(base32::encode(std::string("Hello World"), error) == hello_encoded);
+        REQUIRE(base32::encode("Hello World", error) == hello_encoded_null);
 
-        REQUIRE(base32::encode(std::string("foo"), error, 0) == "CSQPY");
-        REQUIRE(base32::encode(std::string("lowercase UPPERCASE 1434567 !@#$%^&*"), error, 0)
+        REQUIRE(base32::encode(std::string("foo"), error) == "CSQPY");
+        REQUIRE(base32::encode(std::string("lowercase UPPERCASE 1434567 !@#$%^&*"), error)
                 == "DHQQESBJCDGQ6S90AN850HAJ8D0N6H9064T36D1N6RVJ08A04CJ2AQH658");
-        REQUIRE(base32::encode(std::string("Wow, it really works!"), error, 0) == "AXQQEB10D5T20WK5C5P6RY90EXQQ4TVK44");
+        REQUIRE(base32::encode(std::string("Wow, it really works!"), error) == "AXQQEB10D5T20WK5C5P6RY90EXQQ4TVK44");
     }
 
     SECTION("decoding data") {
@@ -177,7 +177,7 @@ TEST_CASE("Douglas Crockford's base32", "[base32][crockford]") {
         REQUIRE((base32::encode(result, hello.data(), hello.size()), result) == hello_encoded);
 
         // Templated result. Use std::vector<uint8_t> to exercise non-char array types.
-        REQUIRE(base32::encode<std::vector<uint8_t>>(hello, error, 0) == hello_uint_vector_encoded);
+        REQUIRE(base32::encode<std::vector<uint8_t>>(hello, error) == hello_uint_vector_encoded);
         REQUIRE(base32::encode<std::vector<uint8_t>>(hello.data(), hello.size(), error) == hello_uint_vector_encoded);
         REQUIRE(base32::encode<std::vector<uint8_t>>(hello_uint_ptr, hello.size(), error) == hello_uint_vector_encoded);
 
@@ -307,31 +307,31 @@ TEST_CASE("base32hex", "[base32][hex]") {
 
     SECTION("encoding data") {
         cppcodec::error error;
-        REQUIRE(base32::encode(std::vector<uint8_t>(), error, 0) == "");
-        REQUIRE(base32::encode(std::vector<uint8_t>({0}), error, 0) == "00======");
-        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0}), error, 0) == "0000====");
-        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0}), error, 0) == "00000===");
-        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0, 0}), error, 0) == "0000000=");
-        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0, 0, 0}), error, 0) == "00000000");
-        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0, 0, 0, 0}), error, 0) == "0000000000======");
+        REQUIRE(base32::encode(std::vector<uint8_t>(), error) == "");
+        REQUIRE(base32::encode(std::vector<uint8_t>({0}), error) == "00======");
+        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0}), error) == "0000====");
+        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0}), error) == "00000===");
+        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0, 0}), error) == "0000000=");
+        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0, 0, 0}), error) == "00000000");
+        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0, 0, 0, 0}), error) == "0000000000======");
 
         // Constructing an std::string reduces the size of the char array by one (null terminator).
         // Therefore, the result for passing the string literal directly ends up encoding
         // one more character, which produces two more symbols in this particular case.
-        REQUIRE(base32::encode(std::string("Hello"), error, 0) == "91IMOR3F");
-        REQUIRE(base32::encode("Hello", error, 0) == "91IMOR3F00======");
+        REQUIRE(base32::encode(std::string("Hello"), error) == "91IMOR3F");
+        REQUIRE(base32::encode("Hello", error) == "91IMOR3F00======");
 
         // RFC 4648: 10. Test Vectors
-        REQUIRE(base32::encode(std::string(""), error, 0) == "");
-        REQUIRE(base32::encode(std::string("f"), error, 0) == "CO======");
-        REQUIRE(base32::encode(std::string("fo"), error, 0) == "CPNG====");
-        REQUIRE(base32::encode(std::string("foo"), error, 0) == "CPNMU===");
-        REQUIRE(base32::encode(std::string("foob"), error, 0) == "CPNMUOG=");
-        REQUIRE(base32::encode(std::string("fooba"), error, 0) == "CPNMUOJ1");
-        REQUIRE(base32::encode(std::string("foobar"), error, 0) == "CPNMUOJ1E8======");
+        REQUIRE(base32::encode(std::string(""), error) == "");
+        REQUIRE(base32::encode(std::string("f"), error) == "CO======");
+        REQUIRE(base32::encode(std::string("fo"), error) == "CPNG====");
+        REQUIRE(base32::encode(std::string("foo"), error) == "CPNMU===");
+        REQUIRE(base32::encode(std::string("foob"), error) == "CPNMUOG=");
+        REQUIRE(base32::encode(std::string("fooba"), error) == "CPNMUOJ1");
+        REQUIRE(base32::encode(std::string("foobar"), error) == "CPNMUOJ1E8======");
 
         // Other test strings.
-        REQUIRE(base32::encode(std::vector<uint8_t>({255, 255, 255, 255, 255}), error, 0) == "VVVVVVVV");
+        REQUIRE(base32::encode(std::vector<uint8_t>({255, 255, 255, 255, 255}), error) == "VVVVVVVV");
     }
 
     SECTION("decoding data") {
@@ -448,32 +448,32 @@ TEST_CASE("base32 (RFC 4648)", "[base32][rfc4648]") {
 
     SECTION("encoding data") {
         cppcodec::error error;
-        REQUIRE(base32::encode(std::vector<uint8_t>(), error, 0) == "");
-        REQUIRE(base32::encode(std::vector<uint8_t>({0}), error, 0) == "AA======");
-        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0}), error, 0) == "AAAA====");
-        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0}), error, 0) == "AAAAA===");
-        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0, 0}), error, 0) == "AAAAAAA=");
-        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0, 0, 0}), error, 0) == "AAAAAAAA");
-        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0, 0, 0, 0}), error, 0) == "AAAAAAAAAA======");
+        REQUIRE(base32::encode(std::vector<uint8_t>(), error) == "");
+        REQUIRE(base32::encode(std::vector<uint8_t>({0}), error) == "AA======");
+        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0}), error) == "AAAA====");
+        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0}), error) == "AAAAA===");
+        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0, 0}), error) == "AAAAAAA=");
+        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0, 0, 0}), error) == "AAAAAAAA");
+        REQUIRE(base32::encode(std::vector<uint8_t>({0, 0, 0, 0, 0, 0}), error) == "AAAAAAAAAA======");
 
         // Constructing an std::string reduces the size of the char array by one (null terminator).
         // Therefore, the result for passing the string literal directly ends up encoding
         // one more character, which produces two more symbols in this particular case.
-        REQUIRE(base32::encode(std::string("12345"), error, 0) == "GEZDGNBV");
-        REQUIRE(base32::encode("12345", error, 0) == "GEZDGNBVAA======");
+        REQUIRE(base32::encode(std::string("12345"), error) == "GEZDGNBV");
+        REQUIRE(base32::encode("12345", error) == "GEZDGNBVAA======");
 
         // RFC 4648: 10. Test Vectors
-        REQUIRE(base32::encode(std::string(""), error, 0) == "");
-        REQUIRE(base32::encode(std::string("f"), error, 0) == "MY======");
-        REQUIRE(base32::encode(std::string("fo"), error, 0) == "MZXQ====");
-        REQUIRE(base32::encode(std::string("foo"), error, 0) == "MZXW6===");
-        REQUIRE(base32::encode(std::string("foob"), error, 0) == "MZXW6YQ=");
-        REQUIRE(base32::encode(std::string("fooba"), error, 0) == "MZXW6YTB");
-        REQUIRE(base32::encode(std::string("foobar"), error, 0) == "MZXW6YTBOI======");
+        REQUIRE(base32::encode(std::string(""), error) == "");
+        REQUIRE(base32::encode(std::string("f"), error) == "MY======");
+        REQUIRE(base32::encode(std::string("fo"), error) == "MZXQ====");
+        REQUIRE(base32::encode(std::string("foo"), error) == "MZXW6===");
+        REQUIRE(base32::encode(std::string("foob"), error) == "MZXW6YQ=");
+        REQUIRE(base32::encode(std::string("fooba"), error) == "MZXW6YTB");
+        REQUIRE(base32::encode(std::string("foobar"), error) == "MZXW6YTBOI======");
 
         // Other test strings.
-        REQUIRE(base32::encode(std::string("ABCDE"), error, 0) == "IFBEGRCF");
-        REQUIRE(base32::encode(std::vector<uint8_t>({255, 255, 255, 255, 255}), error, 0) == "77777777");
+        REQUIRE(base32::encode(std::string("ABCDE"), error) == "IFBEGRCF");
+        REQUIRE(base32::encode(std::vector<uint8_t>({255, 255, 255, 255, 255}), error) == "77777777");
     }
 
     SECTION("decoding data") {
@@ -594,49 +594,49 @@ TEST_CASE("base64 (RFC 4648)", "[base64][rfc4648]") {
 
     SECTION("encoding data") {
         cppcodec::error error;
-        REQUIRE(base64::encode(std::vector<uint8_t>(), error, 0) == "");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0}), error, 0) == "AA==");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0}), error, 0) == "AAA=");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0}), error, 0) == "AAAA");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0, 0}), error, 0) == "AAAAAA==");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0, 0, 0}), error, 0) == "AAAAAAA=");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0, 0, 0, 0}), error, 0) == "AAAAAAAA");
+        REQUIRE(base64::encode(std::vector<uint8_t>(), error) == "");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0}), error) == "AA==");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0}), error) == "AAA=");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0}), error) == "AAAA");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0, 0}), error) == "AAAAAA==");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0, 0, 0}), error) == "AAAAAAA=");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0, 0, 0, 0}), error) == "AAAAAAAA");
 
         // Constructing an std::string reduces the size of the char array by one (null terminator).
         // Therefore, the result for passing the string literal directly ends up encoding
         // one more character, which produces two more symbols in this particular case.
-        REQUIRE(base64::encode(std::string("Man"), error, 0) == "TWFu");
-        REQUIRE(base64::encode("Man", error, 0) == "TWFuAA==");
+        REQUIRE(base64::encode(std::string("Man"), error) == "TWFu");
+        REQUIRE(base64::encode("Man", error) == "TWFuAA==");
 
         // Wikipedia
-        REQUIRE(base64::encode(std::string("pleasure."), error, 0) == "cGxlYXN1cmUu");
-        REQUIRE(base64::encode(std::string("leasure."), error, 0) == "bGVhc3VyZS4=");
-        REQUIRE(base64::encode(std::string("easure."), error, 0) == "ZWFzdXJlLg==");
-        REQUIRE(base64::encode(std::string("asure."), error, 0) == "YXN1cmUu");
-        REQUIRE(base64::encode(std::string("sure."), error, 0) == "c3VyZS4=");
+        REQUIRE(base64::encode(std::string("pleasure."), error) == "cGxlYXN1cmUu");
+        REQUIRE(base64::encode(std::string("leasure."), error) == "bGVhc3VyZS4=");
+        REQUIRE(base64::encode(std::string("easure."), error) == "ZWFzdXJlLg==");
+        REQUIRE(base64::encode(std::string("asure."), error) == "YXN1cmUu");
+        REQUIRE(base64::encode(std::string("sure."), error) == "c3VyZS4=");
 
-        REQUIRE(base64::encode(std::string("any carnal pleas"), error, 0) == "YW55IGNhcm5hbCBwbGVhcw==");
-        REQUIRE(base64::encode(std::string("any carnal pleasu"), error, 0) == "YW55IGNhcm5hbCBwbGVhc3U=");
-        REQUIRE(base64::encode(std::string("any carnal pleasur"), error, 0) == "YW55IGNhcm5hbCBwbGVhc3Vy");
+        REQUIRE(base64::encode(std::string("any carnal pleas"), error) == "YW55IGNhcm5hbCBwbGVhcw==");
+        REQUIRE(base64::encode(std::string("any carnal pleasu"), error) == "YW55IGNhcm5hbCBwbGVhc3U=");
+        REQUIRE(base64::encode(std::string("any carnal pleasur"), error) == "YW55IGNhcm5hbCBwbGVhc3Vy");
 
         // RFC 4648: 9. Illustrations and Examples, adapted for more special characters
-        REQUIRE(base64::encode(std::vector<uint8_t>({0x14, 0xFB, 0xBF, 0x03, 0xD9, 0x7E}), error, 0) == "FPu/A9l+");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0x14, 0xFB, 0xBF, 0x03, 0xD9}), error, 0) == "FPu/A9k=");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0x14, 0xFB, 0xBF, 0x03}), error, 0) == "FPu/Aw==");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0x14, 0xFB, 0xBF, 0x03, 0xD9, 0x7E}), error) == "FPu/A9l+");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0x14, 0xFB, 0xBF, 0x03, 0xD9}), error) == "FPu/A9k=");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0x14, 0xFB, 0xBF, 0x03}), error) == "FPu/Aw==");
 
         // RFC 4648: 10. Test Vectors
-        REQUIRE(base64::encode(std::string(""), error, 0) == "");
-        REQUIRE(base64::encode(std::string("f"), error, 0) == "Zg==");
-        REQUIRE(base64::encode(std::string("fo"), error, 0) == "Zm8=");
-        REQUIRE(base64::encode(std::string("foo"), error, 0) == "Zm9v");
-        REQUIRE(base64::encode(std::string("foob"), error, 0) == "Zm9vYg==");
-        REQUIRE(base64::encode(std::string("fooba"), error, 0) == "Zm9vYmE=");
-        REQUIRE(base64::encode(std::string("foobar"), error, 0) == "Zm9vYmFy");
+        REQUIRE(base64::encode(std::string(""), error) == "");
+        REQUIRE(base64::encode(std::string("f"), error) == "Zg==");
+        REQUIRE(base64::encode(std::string("fo"), error) == "Zm8=");
+        REQUIRE(base64::encode(std::string("foo"), error) == "Zm9v");
+        REQUIRE(base64::encode(std::string("foob"), error) == "Zm9vYg==");
+        REQUIRE(base64::encode(std::string("fooba"), error) == "Zm9vYmE=");
+        REQUIRE(base64::encode(std::string("foobar"), error) == "Zm9vYmFy");
 
         // Other test strings.
-        REQUIRE(base64::encode(std::string("123"), error, 0) == "MTIz");
-        REQUIRE(base64::encode(std::string("ABC"), error, 0) == "QUJD");
-        REQUIRE(base64::encode(std::string("\xFF\xFF\xFF"), error, 0) == "////");
+        REQUIRE(base64::encode(std::string("123"), error) == "MTIz");
+        REQUIRE(base64::encode(std::string("ABC"), error) == "QUJD");
+        REQUIRE(base64::encode(std::string("\xFF\xFF\xFF"), error) == "////");
     }
 
     SECTION("decoding data") {
@@ -758,32 +758,32 @@ TEST_CASE("base64 (unpadded URL-safe)", "[base64][url_unpadded]") {
 
     SECTION("encoding data") {
         cppcodec::error error;
-        REQUIRE(base64::encode(std::vector<uint8_t>(), error, 0) == "");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0}), error, 0) == "AA");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0}), error, 0) == "AAA");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0}), error, 0) == "AAAA");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0, 0}), error, 0) == "AAAAAA");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0, 0, 0}), error, 0) == "AAAAAAA");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0, 0, 0, 0}), error, 0) == "AAAAAAAA");
+        REQUIRE(base64::encode(std::vector<uint8_t>(), error) == "");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0}), error) == "AA");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0}), error) == "AAA");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0}), error) == "AAAA");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0, 0}), error) == "AAAAAA");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0, 0, 0}), error) == "AAAAAAA");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0, 0, 0, 0}), error) == "AAAAAAAA");
 
         // RFC 4648: 9. Illustrations and Examples, adapted for more special characters
-        REQUIRE(base64::encode(std::vector<uint8_t>({0x14, 0xFB, 0xBF, 0x03, 0xD9, 0x7E}), error, 0) == "FPu_A9l-");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0x14, 0xFB, 0xBF, 0x03, 0xD9}), error, 0) == "FPu_A9k");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0x14, 0xFB, 0xBF, 0x03}), error, 0) == "FPu_Aw");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0x14, 0xFB, 0xBF, 0x03, 0xD9, 0x7E}), error) == "FPu_A9l-");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0x14, 0xFB, 0xBF, 0x03, 0xD9}), error) == "FPu_A9k");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0x14, 0xFB, 0xBF, 0x03}), error) == "FPu_Aw");
 
         // RFC 4648: 10. Test Vectors
-        REQUIRE(base64::encode(std::string(""), error, 0) == "");
-        REQUIRE(base64::encode(std::string("f"), error, 0) == "Zg");
-        REQUIRE(base64::encode(std::string("fo"), error, 0) == "Zm8");
-        REQUIRE(base64::encode(std::string("foo"), error, 0) == "Zm9v");
-        REQUIRE(base64::encode(std::string("foob"), error, 0) == "Zm9vYg");
-        REQUIRE(base64::encode(std::string("fooba"), error, 0) == "Zm9vYmE");
-        REQUIRE(base64::encode(std::string("foobar"), error, 0) == "Zm9vYmFy");
+        REQUIRE(base64::encode(std::string(""), error) == "");
+        REQUIRE(base64::encode(std::string("f"), error) == "Zg");
+        REQUIRE(base64::encode(std::string("fo"), error) == "Zm8");
+        REQUIRE(base64::encode(std::string("foo"), error) == "Zm9v");
+        REQUIRE(base64::encode(std::string("foob"), error) == "Zm9vYg");
+        REQUIRE(base64::encode(std::string("fooba"), error) == "Zm9vYmE");
+        REQUIRE(base64::encode(std::string("foobar"), error) == "Zm9vYmFy");
 
         // Other test strings.
-        REQUIRE(base64::encode(std::string("123"), error, 0) == "MTIz");
-        REQUIRE(base64::encode(std::string("ABC"), error, 0) == "QUJD");
-        REQUIRE(base64::encode(std::string("\xFF\xFF\xFF"), error, 0) == "____");
+        REQUIRE(base64::encode(std::string("123"), error) == "MTIz");
+        REQUIRE(base64::encode(std::string("ABC"), error) == "QUJD");
+        REQUIRE(base64::encode(std::string("\xFF\xFF\xFF"), error) == "____");
     }
 
     SECTION("decoding data") {
@@ -882,32 +882,32 @@ TEST_CASE("base64 (URL-safe)", "[base64][url]") {
 
     SECTION("encoding data") {
         cppcodec::error error;
-        REQUIRE(base64::encode(std::vector<uint8_t>(), error, 0) == "");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0}), error, 0) == "AA==");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0}), error, 0) == "AAA=");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0}), error, 0) == "AAAA");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0, 0}), error, 0) == "AAAAAA==");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0, 0, 0}), error, 0) == "AAAAAAA=");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0, 0, 0, 0}), error, 0) == "AAAAAAAA");
+        REQUIRE(base64::encode(std::vector<uint8_t>(), error) == "");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0}), error) == "AA==");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0}), error) == "AAA=");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0}), error) == "AAAA");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0, 0}), error) == "AAAAAA==");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0, 0, 0}), error) == "AAAAAAA=");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0, 0, 0, 0, 0, 0}), error) == "AAAAAAAA");
 
         // RFC 4648: 9. Illustrations and Examples, adapted for more special characters
-        REQUIRE(base64::encode(std::vector<uint8_t>({0x14, 0xFB, 0xBF, 0x03, 0xD9, 0x7E}), error, 0) == "FPu_A9l-");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0x14, 0xFB, 0xBF, 0x03, 0xD9}), error, 0) == "FPu_A9k=");
-        REQUIRE(base64::encode(std::vector<uint8_t>({0x14, 0xFB, 0xBF, 0x03}), error, 0) == "FPu_Aw==");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0x14, 0xFB, 0xBF, 0x03, 0xD9, 0x7E}), error) == "FPu_A9l-");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0x14, 0xFB, 0xBF, 0x03, 0xD9}), error) == "FPu_A9k=");
+        REQUIRE(base64::encode(std::vector<uint8_t>({0x14, 0xFB, 0xBF, 0x03}), error) == "FPu_Aw==");
 
         // RFC 4648: 10. Test Vectors
-        REQUIRE(base64::encode(std::string(""), error, 0) == "");
-        REQUIRE(base64::encode(std::string("f"), error, 0) == "Zg==");
-        REQUIRE(base64::encode(std::string("fo"), error, 0) == "Zm8=");
-        REQUIRE(base64::encode(std::string("foo"), error, 0) == "Zm9v");
-        REQUIRE(base64::encode(std::string("foob"), error, 0) == "Zm9vYg==");
-        REQUIRE(base64::encode(std::string("fooba"), error, 0) == "Zm9vYmE=");
-        REQUIRE(base64::encode(std::string("foobar"), error, 0) == "Zm9vYmFy");
+        REQUIRE(base64::encode(std::string(""), error) == "");
+        REQUIRE(base64::encode(std::string("f"), error) == "Zg==");
+        REQUIRE(base64::encode(std::string("fo"), error) == "Zm8=");
+        REQUIRE(base64::encode(std::string("foo"), error) == "Zm9v");
+        REQUIRE(base64::encode(std::string("foob"), error) == "Zm9vYg==");
+        REQUIRE(base64::encode(std::string("fooba"), error) == "Zm9vYmE=");
+        REQUIRE(base64::encode(std::string("foobar"), error) == "Zm9vYmFy");
 
         // Other test strings.
-        REQUIRE(base64::encode(std::string("123"), error, 0) == "MTIz");
-        REQUIRE(base64::encode(std::string("ABC"), error, 0) == "QUJD");
-        REQUIRE(base64::encode(std::string("\xFF\xFF\xFF"), error, 0) == "____");
+        REQUIRE(base64::encode(std::string("123"), error) == "MTIz");
+        REQUIRE(base64::encode(std::string("ABC"), error) == "QUJD");
+        REQUIRE(base64::encode(std::string("\xFF\xFF\xFF"), error) == "____");
     }
 
     SECTION("decoding data") {
@@ -1012,31 +1012,31 @@ TEST_CASE("hex (lowercase)", "[hex][lower]") {
 
     SECTION("encoding data") {
         cppcodec::error error;
-        REQUIRE(hex::encode(std::vector<uint8_t>(), error, 0) == "");
-        REQUIRE(hex::encode(std::vector<uint8_t>({0}), error, 0) == "00");
-        REQUIRE(hex::encode(std::vector<uint8_t>({0, 0}), error, 0) == "0000");
-        REQUIRE(hex::encode(std::vector<uint8_t>({0, 0, 0}), error, 0) == "000000");
-        REQUIRE(hex::encode(std::vector<uint8_t>({0, 0, 0, 0}), error, 0) == "00000000");
-        REQUIRE(hex::encode(std::vector<uint8_t>({0, 0, 0, 0, 0}), error, 0) == "0000000000");
-        REQUIRE(hex::encode(std::vector<uint8_t>({0, 0, 0, 0, 0, 0}), error, 0) == "000000000000");
+        REQUIRE(hex::encode(std::vector<uint8_t>(), error) == "");
+        REQUIRE(hex::encode(std::vector<uint8_t>({0}), error) == "00");
+        REQUIRE(hex::encode(std::vector<uint8_t>({0, 0}), error) == "0000");
+        REQUIRE(hex::encode(std::vector<uint8_t>({0, 0, 0}), error) == "000000");
+        REQUIRE(hex::encode(std::vector<uint8_t>({0, 0, 0, 0}), error) == "00000000");
+        REQUIRE(hex::encode(std::vector<uint8_t>({0, 0, 0, 0, 0}), error) == "0000000000");
+        REQUIRE(hex::encode(std::vector<uint8_t>({0, 0, 0, 0, 0, 0}), error) == "000000000000");
 
         // Constructing an std::string reduces the size of the char array by one (null terminator).
         // Therefore, the result for passing the string literal directly ends up encoding
         // one more character, which produces two more symbols in this particular case.
-        REQUIRE(hex::encode(std::string("1"), error, 0) == "31");
-        REQUIRE(hex::encode("1", error, 0) == "3100");
+        REQUIRE(hex::encode(std::string("1"), error) == "31");
+        REQUIRE(hex::encode("1", error) == "3100");
 
-        REQUIRE(hex::encode(std::string("A"), error, 0) == "41");
-        REQUIRE(hex::encode(std::vector<uint8_t>({255}), error, 0) == "ff");
+        REQUIRE(hex::encode(std::string("A"), error) == "41");
+        REQUIRE(hex::encode(std::vector<uint8_t>({255}), error) == "ff");
 
         // RFC 4648: 10. Test Vectors
-        REQUIRE(hex::encode(std::string(""), error, 0) == "");
-        REQUIRE(hex::encode(std::string("f"), error, 0) == "66");
-        REQUIRE(hex::encode(std::string("fo"), error, 0) == "666f");
-        REQUIRE(hex::encode(std::string("foo"), error, 0) == "666f6f");
-        REQUIRE(hex::encode(std::string("foob"), error, 0) == "666f6f62");
-        REQUIRE(hex::encode(std::string("fooba"), error, 0) == "666f6f6261");
-        REQUIRE(hex::encode(std::string("foobar"), error, 0) == "666f6f626172");
+        REQUIRE(hex::encode(std::string(""), error) == "");
+        REQUIRE(hex::encode(std::string("f"), error) == "66");
+        REQUIRE(hex::encode(std::string("fo"), error) == "666f");
+        REQUIRE(hex::encode(std::string("foo"), error) == "666f6f");
+        REQUIRE(hex::encode(std::string("foob"), error) == "666f6f62");
+        REQUIRE(hex::encode(std::string("fooba"), error) == "666f6f6261");
+        REQUIRE(hex::encode(std::string("foobar"), error) == "666f6f626172");
     }
 
     SECTION("decoding data") {
@@ -1124,31 +1124,31 @@ TEST_CASE("hex (uppercase)", "[hex][upper]") {
 
     SECTION("encoding data") {
         cppcodec::error error;
-        REQUIRE(hex::encode(std::vector<uint8_t>(), error, 0) == "");
-        REQUIRE(hex::encode(std::vector<uint8_t>({0}), error, 0) == "00");
-        REQUIRE(hex::encode(std::vector<uint8_t>({0, 0}), error, 0) == "0000");
-        REQUIRE(hex::encode(std::vector<uint8_t>({0, 0, 0}), error, 0) == "000000");
-        REQUIRE(hex::encode(std::vector<uint8_t>({0, 0, 0, 0}), error, 0) == "00000000");
-        REQUIRE(hex::encode(std::vector<uint8_t>({0, 0, 0, 0, 0}), error, 0) == "0000000000");
-        REQUIRE(hex::encode(std::vector<uint8_t>({0, 0, 0, 0, 0, 0}), error, 0) == "000000000000");
+        REQUIRE(hex::encode(std::vector<uint8_t>(), error) == "");
+        REQUIRE(hex::encode(std::vector<uint8_t>({0}), error) == "00");
+        REQUIRE(hex::encode(std::vector<uint8_t>({0, 0}), error) == "0000");
+        REQUIRE(hex::encode(std::vector<uint8_t>({0, 0, 0}), error) == "000000");
+        REQUIRE(hex::encode(std::vector<uint8_t>({0, 0, 0, 0}), error) == "00000000");
+        REQUIRE(hex::encode(std::vector<uint8_t>({0, 0, 0, 0, 0}), error) == "0000000000");
+        REQUIRE(hex::encode(std::vector<uint8_t>({0, 0, 0, 0, 0, 0}), error) == "000000000000");
 
         // Constructing an std::string reduces the size of the char array by one (null terminator).
         // Therefore, the result for passing the string literal directly ends up encoding
         // one more character, which produces two more symbols in this particular case.
-        REQUIRE(hex::encode(std::string("1"), error, 0) == "31");
-        REQUIRE(hex::encode("1", error, 0) == "3100");
+        REQUIRE(hex::encode(std::string("1"), error) == "31");
+        REQUIRE(hex::encode("1", error) == "3100");
 
-        REQUIRE(hex::encode(std::string("A"), error, 0) == "41");
-        REQUIRE(hex::encode(std::vector<uint8_t>({255}), error, 0) == "FF");
+        REQUIRE(hex::encode(std::string("A"), error) == "41");
+        REQUIRE(hex::encode(std::vector<uint8_t>({255}), error) == "FF");
 
         // RFC 4648: 10. Test Vectors
-        REQUIRE(hex::encode(std::string(""), error, 0) == "");
-        REQUIRE(hex::encode(std::string("f"), error, 0) == "66");
-        REQUIRE(hex::encode(std::string("fo"), error, 0) == "666F");
-        REQUIRE(hex::encode(std::string("foo"), error, 0) == "666F6F");
-        REQUIRE(hex::encode(std::string("foob"), error, 0) == "666F6F62");
-        REQUIRE(hex::encode(std::string("fooba"), error, 0) == "666F6F6261");
-        REQUIRE(hex::encode(std::string("foobar"), error, 0) == "666F6F626172");
+        REQUIRE(hex::encode(std::string(""), error) == "");
+        REQUIRE(hex::encode(std::string("f"), error) == "66");
+        REQUIRE(hex::encode(std::string("fo"), error) == "666F");
+        REQUIRE(hex::encode(std::string("foo"), error) == "666F6F");
+        REQUIRE(hex::encode(std::string("foob"), error) == "666F6F62");
+        REQUIRE(hex::encode(std::string("fooba"), error) == "666F6F6261");
+        REQUIRE(hex::encode(std::string("foobar"), error) == "666F6F626172");
     }
 
     SECTION("decoding data") {
